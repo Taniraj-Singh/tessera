@@ -1,0 +1,8 @@
+if(TESSERA_ENABLE_SANITIZERS OR CMAKE_BUILD_TYPE STREQUAL "Sanitize")
+    if(MSVC)
+        message(WARNING "Sanitizers are not configured for MSVC in this project.")
+    else()
+        add_compile_options(-fsanitize=address,undefined -fno-omit-frame-pointer)
+        add_link_options(-fsanitize=address,undefined)
+    endif()
+endif()

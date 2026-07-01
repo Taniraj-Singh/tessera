@@ -1,0 +1,10 @@
+if(NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    message(FATAL_ERROR "Fuzz targets require Clang with libFuzzer support.")
+endif()
+
+function(tessera_add_fuzz_target target_name)
+    add_executable(${target_name} ${ARGN})
+    target_link_libraries(${target_name} PRIVATE Tessera::tessera)
+    target_compile_options(${target_name} PRIVATE -fsanitize=fuzzer,address,undefined)
+    target_link_options(${target_name} PRIVATE -fsanitize=fuzzer,address,undefined)
+endfunction()

@@ -1,0 +1,10 @@
+language: c++
+main_repo: .
+sanitizers:
+  - address
+  - undefined
+architectures:
+  - x86_64
+fuzzing_engines:
+  - libfuzzer
+file_github_issue: false

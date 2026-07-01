@@ -1,0 +1,4 @@
+tessera_add_fuzz_target(parser_fuzzer parser_fuzzer.cpp)
+tessera_add_fuzz_target(decoder_fuzzer decoder_fuzzer.cpp)
+tessera_add_fuzz_target(serializer_fuzzer serializer_fuzzer.cpp)
+tessera_add_fuzz_target(validator_fuzzer validator_fuzzer.cpp)

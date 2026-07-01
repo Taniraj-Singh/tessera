@@ -1,0 +1,12 @@
+build/
+build-*/
+.toolchain/
+out/
+*.tbc
+!fuzz/corpus/*.tbc
+*.obj
+*.exe
+*.pdb
+compile_commands.json
+CMakeCache.txt
+CMakeFiles/

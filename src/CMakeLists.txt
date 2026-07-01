@@ -1,0 +1,19 @@
+target_sources(
+    tessera
+    PRIVATE
+        core/types.cpp
+        buffer/reader_writer.cpp
+        checksum/crc32c.cpp
+        header/container_header.cpp
+        catalog/section_catalog.cpp
+        schema/schema_block.cpp
+        records/record_batch.cpp
+        version/negotiation.cpp
+        plugins/registry.cpp
+        parse/parser.cpp
+        serialize/serializer.cpp
+        validate/validator.cpp
+        stream/stream_reader.cpp
+        mmap/mapped_file.cpp
+        convert/converter.cpp
+)

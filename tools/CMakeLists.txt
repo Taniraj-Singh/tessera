@@ -1,0 +1,2 @@
+add_subdirectory(tbc_inspect)
+add_subdirectory(tbc_convert)
