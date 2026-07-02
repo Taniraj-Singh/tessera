@@ -4,6 +4,40 @@ target_sources(
         core/types.cpp
         buffer/reader_writer.cpp
         checksum/crc32c.cpp
+        memory/byte_buffer.cpp
+        memory/arena.cpp
+        encoding/varint.cpp
+        compress/codec.cpp
+        compress/store_codec.cpp
+        compress/rle_codec.cpp
+        compress/lz77_codec.cpp
+        compress/frame.cpp
+        hash/murmur.cpp
+        index/hash_index.cpp
+        index/string_index.cpp
+        index/section_index.cpp
+        reflect/type_info.cpp
+        metadata/registry.cpp
+        schema/type_system.cpp
+        schema/schema_compiler.cpp
+        validate/semantic_validator.cpp
+        validate/constraint_validator.cpp
+        archive/archive_reader.cpp
+        archive/archive_writer.cpp
+        pipeline/incremental_decoder.cpp
+        pipeline/incremental_encoder.cpp
+        pipeline/pipeline.cpp
+        diag/diagnostics.cpp
+        diag/trace.cpp
+        log/logger.cpp
+        config/config.cpp
+        txn/transaction.cpp
+        recovery/repair.cpp
+        resource/resource_manager.cpp
+        graph/object_graph.cpp
+        visit/visitor.cpp
+        stats/statistics.cpp
+        profile/profiler.cpp
         header/container_header.cpp
         catalog/section_catalog.cpp
         schema/schema_block.cpp

@@ -6,15 +6,21 @@ Tessera is a production-oriented C++20 SDK for the **Tessera Binary Container (T
 
 ## Features
 
-- Modular parser, serializer, and multi-stage validator
-- Streaming reader for incremental inspection
-- Cross-platform memory-mapped file reader
-- Plugin hooks at major pipeline stages
+- Modular parser, serializer, and multi-stage validator (structural, semantic, constraint)
+- Compression codec layer (`store` / `rle` / `lz77`) with self-describing frames
+- Multi-container archive format (TBA) with a checksummed frame directory
+- Incremental push-model decoder/encoder and a composable processing pipeline
+- Schema engine: type-system compatibility rules and a layout-resolving compiler
+- Reflection, metadata registry, and hash/index structures for O(1) section lookup
+- Transactional editing, container repair/recovery, and resource budgeting
+- Object-graph traversal, visitor framework, statistics, and a profiler
+- Diagnostics, deterministic tracing, leveled logging, and configuration
+- Streaming reader, cross-platform memory-mapped file reader, plugin hooks
 - Version negotiation for forward-compatible readers
 - Conversion utilities (JSON summary, hex dump, canonical binary)
 - CLI tools: `tbc_inspect`, `tbc_convert`
 - Unit, integration, regression, and edge-case tests
-- libFuzzer targets with ClusterFuzzLite integration
+- Seven libFuzzer targets with ClusterFuzzLite integration
 - Offline build (no network fetches)
 
 ## Quick Start
@@ -68,6 +74,13 @@ cmake --build build-fuzz
 - [Developer Guide](docs/DEVELOPER_GUIDE.md)
 - [API Overview](docs/API.md)
 - [Directory Layout](docs/DIRECTORY.md)
+
+### Module guides
+
+- Foundation: [Memory](docs/modules/MEMORY.md) · [Encoding](docs/modules/ENCODING.md)
+- Data path: [Compression](docs/modules/COMPRESSION.md) · [Archive](docs/modules/ARCHIVE.md) · [Pipeline](docs/modules/PIPELINE.md)
+- Analysis: [Index & Hash](docs/modules/INDEX.md) · [Reflection & Metadata](docs/modules/REFLECTION.md) · [Schema Engine](docs/modules/SCHEMA_ENGINE.md) · [Validation](docs/modules/VALIDATION.md)
+- Support: [Observability](docs/modules/OBSERVABILITY.md) · [Lifecycle](docs/modules/LIFECYCLE.md) · [Introspection](docs/modules/INTROSPECTION.md)
 
 ## License
 

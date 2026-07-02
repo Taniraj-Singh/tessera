@@ -1,2 +1,4 @@
 add_subdirectory(tbc_inspect)
 add_subdirectory(tbc_convert)
+add_subdirectory(tbc_archive)
+add_subdirectory(corpus_gen)

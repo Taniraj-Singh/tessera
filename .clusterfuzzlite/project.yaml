@@ -1,5 +1,13 @@
 language: c++
 main_repo: .
+fuzz_targets:
+  - parser_fuzzer
+  - decoder_fuzzer
+  - serializer_fuzzer
+  - validator_fuzzer
+  - compress_fuzzer
+  - archive_fuzzer
+  - pipeline_fuzzer
 sanitizers:
   - address
   - undefined

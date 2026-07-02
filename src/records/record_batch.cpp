@@ -3,12 +3,68 @@
 #include "tessera/buffer/reader_writer.hpp"
 #include "tessera/checksum/crc32c.hpp"
 #include "tessera/core/constants.hpp"
+#include "tessera/schema/schema_compiler.hpp"
 
 #include <cstring>
 
 namespace tessera::records {
 
 namespace {
+
+// Decodes one fixed-width field with a direct little-endian read, advancing the
+// cursor by the field's on-wire width. Used only by the fixed-layout fast path,
+// which has already validated that the row region holds every row; the variable
+// types never reach here.
+FieldValue read_fixed_field(schema::FieldType type, const std::uint8_t*& cursor) {
+    switch (type) {
+    case schema::FieldType::Bool: {
+        const bool value = *cursor != 0;
+        cursor += 1;
+        return FieldValue{value};
+    }
+    case schema::FieldType::U8: {
+        const std::uint8_t value = *cursor;
+        cursor += 1;
+        return FieldValue{value};
+    }
+    case schema::FieldType::I32: {
+        const std::uint32_t raw = core::read_le_u32(cursor);
+        cursor += 4;
+        return FieldValue{static_cast<std::int32_t>(raw)};
+    }
+    case schema::FieldType::U32: {
+        const std::uint32_t raw = core::read_le_u32(cursor);
+        cursor += 4;
+        return FieldValue{raw};
+    }
+    case schema::FieldType::I64: {
+        const std::uint64_t raw = core::read_le_u64(cursor);
+        cursor += 8;
+        return FieldValue{static_cast<std::int64_t>(raw)};
+    }
+    case schema::FieldType::U64: {
+        const std::uint64_t raw = core::read_le_u64(cursor);
+        cursor += 8;
+        return FieldValue{raw};
+    }
+    case schema::FieldType::F64: {
+        const std::uint64_t bits = core::read_le_u64(cursor);
+        cursor += 8;
+        double value = 0.0;
+        std::memcpy(&value, &bits, sizeof(value));
+        return FieldValue{value};
+    }
+    case schema::FieldType::TimestampMs: {
+        const std::uint64_t raw = core::read_le_u64(cursor);
+        cursor += 8;
+        return FieldValue{raw};
+    }
+    case schema::FieldType::Utf8:
+    case schema::FieldType::Bytes:
+        break;
+    }
+    return FieldValue{std::uint8_t{0}};
+}
 
 core::Result<FieldValue> read_field(buffer::Reader& reader, const schema::FieldDescriptor& field) {
     switch (field.type) {
@@ -200,6 +256,29 @@ core::Result<RecordBatch> decode(core::ByteSpan block, const schema::SchemaBlock
         batch.row_count = *row_count;
     } else {
         return row_count.error();
+    }
+
+    // Fixed-layout fast path. When every field is fixed-width the row stride is
+    // a constant, so the whole row region can be bounds-checked in a single
+    // comparison and each row decoded with direct little-endian reads instead of
+    // the per-field bounded Reader. The compiled schema supplies the stride;
+    // variable-width schemas fall through to the general path below.
+    if (auto compiled = schema::compile(schema); compiled && compiled->all_fixed()) {
+        const std::size_t stride = compiled->min_row_size();
+        const std::size_t available = bounded.size - reader.position();
+        if (stride != 0 && batch.row_count <= available / stride) {
+            const std::uint8_t* cursor = bounded.data + reader.position();
+            batch.rows.reserve(batch.row_count);
+            for (std::uint32_t row_index = 0; row_index < batch.row_count; ++row_index) {
+                RecordRow row{};
+                row.values.reserve(schema.fields.size());
+                for (const schema::FieldDescriptor& field : schema.fields) {
+                    row.values.push_back(read_fixed_field(field.type, cursor));
+                }
+                batch.rows.push_back(std::move(row));
+            }
+            return batch;
+        }
     }
 
     batch.rows.reserve(batch.row_count);

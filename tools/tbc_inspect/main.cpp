@@ -12,7 +12,7 @@ std::vector<std::uint8_t> read_file(const std::string& path) {
 }
 
 void print_usage() {
-    std::cout << "tbc_inspect <file.tbc> [--json|--validate|--stream]\n";
+    std::cout << "tbc_inspect <file.tbc> [--json|--validate|--stream|--stats]\n";
 }
 
 } // namespace
@@ -27,6 +27,7 @@ int main(int argc, char** argv) {
     const bool json_output = argc > 2 && std::string(argv[2]) == "--json";
     const bool validate_only = argc > 2 && std::string(argv[2]) == "--validate";
     const bool stream_mode = argc > 2 && std::string(argv[2]) == "--stream";
+    const bool stats_mode = argc > 2 && std::string(argv[2]) == "--stats";
 
     tessera::mmap::MappedFile mapped{};
     tessera::core::ByteSpan input{};
@@ -84,6 +85,14 @@ int main(int argc, char** argv) {
     if (!container) {
         std::cerr << "parse failed: " << container.error().message << '\n';
         return 5;
+    }
+
+    if (stats_mode) {
+        const tessera::stats::ContainerStats stats = tessera::stats::collect(*container);
+        std::cout << "sections=" << stats.sections << " rows=" << stats.total_rows
+                  << " fields=" << stats.total_fields << " value_bytes=" << stats.total_value_bytes
+                  << " largest_section_rows=" << stats.largest_section_rows << '\n';
+        return 0;
     }
 
     tessera::convert::ConvertOptions options{};

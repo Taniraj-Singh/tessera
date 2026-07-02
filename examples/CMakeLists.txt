@@ -1,2 +1,5 @@
 add_subdirectory(create_sample)
 add_subdirectory(validate_file)
+add_subdirectory(archive_bundle)
+add_subdirectory(compress_demo)
+add_subdirectory(inspect_stats)

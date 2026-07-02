@@ -13,15 +13,21 @@ Tessera implements the Tessera Binary Container (TBC) format as a layered SDK. E
                             │
 ┌───────────────────────────▼─────────────────────────────┐
 │  Orchestration: parse · serialize · validate · convert  │
-│  stream · mmap · version · plugins                      │
+│  stream · pipeline · mmap · version · plugins           │
+└───────────────────────────┬─────────────────────────────┘
+                            │
+┌───────────────────────────▼─────────────────────────────┐
+│  Archive: archive reader/writer over framed containers  │
 └───────────────────────────┬─────────────────────────────┘
                             │
 ┌───────────────────────────▼─────────────────────────────┐
 │  Artifact modules: header · catalog · schema · records  │
+│  compress (codec + frame) · index · reflect · metadata  │
 └───────────────────────────┬─────────────────────────────┘
                             │
 ┌───────────────────────────▼─────────────────────────────┐
-│  Foundation: core · buffer · checksum                   │
+│  Foundation: core · util · buffer · memory · encoding   │
+│              checksum                                    │
 └─────────────────────────────────────────────────────────┘
 ```
 
