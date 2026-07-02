@@ -14,6 +14,7 @@ enum class CodecId : std::uint8_t {
     Store = 0, // identity — no transform
     Rle = 1,   // byte-oriented run-length (PackBits-style)
     Lz77 = 2,  // LZSS sliding window with 12-bit distance / 4-bit length
+    Delta = 3, // byte-delta filter followed by run-length coding
 };
 
 // A codec transforms a byte range in both directions. Decompression takes the

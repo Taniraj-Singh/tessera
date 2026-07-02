@@ -13,6 +13,8 @@ add_executable(tessera_tests
     unit/observability_tests.cpp
     unit/lifecycle_tests.cpp
     unit/introspection_tests.cpp
+    unit/textio_tests.cpp
+    unit/query_tests.cpp
     integration/integration_tests.cpp
     regression/regression_tests.cpp
     edge/edge_tests.cpp

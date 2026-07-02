@@ -15,6 +15,8 @@ int run_pipeline_tests();
 int run_observability_tests();
 int run_lifecycle_tests();
 int run_introspection_tests();
+int run_textio_tests();
+int run_query_tests();
 int run_integration_tests();
 int run_regression_tests();
 int run_edge_tests();
@@ -33,6 +35,8 @@ int run_all_tests() {
     failures += run_observability_tests();
     failures += run_lifecycle_tests();
     failures += run_introspection_tests();
+    failures += run_textio_tests();
+    failures += run_query_tests();
     failures += run_integration_tests();
     failures += run_regression_tests();
     failures += run_edge_tests();

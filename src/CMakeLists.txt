@@ -11,11 +11,13 @@ target_sources(
         compress/store_codec.cpp
         compress/rle_codec.cpp
         compress/lz77_codec.cpp
+        compress/delta_codec.cpp
         compress/frame.cpp
         hash/murmur.cpp
         index/hash_index.cpp
         index/string_index.cpp
         index/section_index.cpp
+        index/ordered_index.cpp
         reflect/type_info.cpp
         metadata/registry.cpp
         schema/type_system.cpp
@@ -38,6 +40,12 @@ target_sources(
         visit/visitor.cpp
         stats/statistics.cpp
         profile/profiler.cpp
+        textio/json.cpp
+        textio/container_json.cpp
+        textio/csv.cpp
+        textio/hex.cpp
+        query/predicate.cpp
+        diff/section_diff.cpp
         header/container_header.cpp
         catalog/section_catalog.cpp
         schema/schema_block.cpp

@@ -1,5 +1,6 @@
 #include "tessera/compress/codec.hpp"
 
+#include "tessera/compress/delta_codec.hpp"
 #include "tessera/compress/lz77_codec.hpp"
 #include "tessera/compress/rle_codec.hpp"
 #include "tessera/compress/store_codec.hpp"
@@ -11,6 +12,7 @@ core::Result<CodecId> parse_codec_id(std::uint8_t raw) {
     case static_cast<std::uint8_t>(CodecId::Store):
     case static_cast<std::uint8_t>(CodecId::Rle):
     case static_cast<std::uint8_t>(CodecId::Lz77):
+    case static_cast<std::uint8_t>(CodecId::Delta):
         return static_cast<CodecId>(raw);
     default:
         return core::Error{core::ErrorCode::InvalidEnum, "unknown codec id", 0};
@@ -21,6 +23,7 @@ const Codec* find_codec(CodecId id) noexcept {
     static const StoreCodec store;
     static const RleCodec rle;
     static const Lz77Codec lz77;
+    static const DeltaCodec delta;
     switch (id) {
     case CodecId::Store:
         return &store;
@@ -28,6 +31,8 @@ const Codec* find_codec(CodecId id) noexcept {
         return &rle;
     case CodecId::Lz77:
         return &lz77;
+    case CodecId::Delta:
+        return &delta;
     }
     return nullptr;
 }

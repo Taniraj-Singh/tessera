@@ -37,6 +37,14 @@
 #include "tessera/txn/transaction.hpp"
 #include "tessera/visit/visitor.hpp"
 
+// Text I/O, query, and diff
+#include "tessera/diff/section_diff.hpp"
+#include "tessera/query/predicate.hpp"
+#include "tessera/textio/container_json.hpp"
+#include "tessera/textio/csv.hpp"
+#include "tessera/textio/hex.hpp"
+#include "tessera/textio/json.hpp"
+
 // Support
 #include "tessera/config/config.hpp"
 #include "tessera/diag/diagnostics.hpp"
