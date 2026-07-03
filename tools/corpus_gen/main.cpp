@@ -6,9 +6,8 @@
 #include <string>
 #include <vector>
 
-// Generates valid seed inputs for the fuzz harnesses. Fuzzing mutates outward
-// from these, so shipping structurally valid seeds is the single best way to
-// reach the deep, format-gated logic quickly. Run: corpus_gen <output_dir>
+// Writes example inputs (a container, a schema block, a compression frame, and
+// an archive) that can be used as fuzzing seeds. Run: corpus_gen <output_dir>
 // (the directory must already exist).
 
 namespace {

@@ -11,16 +11,12 @@
 namespace tessera::archive {
 
 // Tessera Binary Archive (TBA) — a container-of-containers. An archive bundles
-// several TBC containers, each stored as a self-describing compression frame,
-// behind a directory that records where every frame lives and a checksum of its
-// decompressed contents.
+// several TBC containers, each stored as a compression frame, behind a directory
+// that records where every frame lives and a checksum of its decompressed
+// contents.
 //
 // Layout:
 //   [fixed header] [directory block] [frame region]
-//
-// Reaching a record now traverses: archive header -> directory entry -> frame
-// header -> codec decompress -> container header -> catalog -> schema -> record
-// batch. That depth is the point: no single function reveals the full path.
 
 inline constexpr std::uint32_t kArchiveMagic = 0x31414254U; // 'TBA1' little-endian
 inline constexpr std::uint16_t kArchiveVersion = 0x0100U;

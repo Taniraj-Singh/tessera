@@ -12,9 +12,9 @@ Tessera ships seven libFuzzer harnesses, each targeting a distinct entry point.
 | `archive_fuzzer` | `ArchiveReader::open` + `parse_entry` | archive → frame → container |
 | `pipeline_fuzzer` | `IncrementalDecoder` + `run_archive_pipeline` | chunked decode + full pipeline |
 
-The deepest harnesses (`archive_fuzzer`, `pipeline_fuzzer`) traverse the entire
-stack from a single buffer: archive directory → compression frame → codec →
-container header → catalog → schema → record batch.
+`archive_fuzzer` and `pipeline_fuzzer` cover the layered path from a single
+buffer: archive directory → compression frame → codec → container header →
+catalog → schema → record batch.
 
 ## Building and running (Clang + libFuzzer)
 
@@ -35,7 +35,6 @@ cmake --build build --target corpus_gen
 mkdir -p /tmp/seeds && ./build/tools/corpus_gen/corpus_gen /tmp/seeds
 ```
 
-`corpus_gen` emits a valid container (`container.tbc`), a standalone schema block
-(`schema.bin`), a compression frame (`frame.tfz`), and a two-entry archive
-(`archive.tba`). The ClusterFuzzLite `build.sh` runs this automatically and packs
-each fuzzer's `<name>_seed_corpus.zip` as a best-effort step.
+`corpus_gen` emits a container (`container.tbc`), a schema block (`schema.bin`),
+a compression frame (`frame.tfz`), and a two-entry archive (`archive.tba`). Copy
+whichever inputs are relevant into `corpus/` before fuzzing.

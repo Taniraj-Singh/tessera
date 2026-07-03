@@ -13,8 +13,7 @@ struct Match {
 };
 
 // Naive greedy longest-match search over the preceding window. Adequate for the
-// container's modest section sizes; the format it produces is what the decoder
-// (and any adversarial input) must be validated against.
+// container's modest section sizes.
 Match find_match(core::ByteSpan input, std::size_t cursor) {
     Match best{};
     const std::size_t window_start = cursor > Lz77Codec::kWindowSize ? cursor - Lz77Codec::kWindowSize : 0;

@@ -20,19 +20,16 @@ CRC32C, creation timestamp.
 **Frame region:** one `compress::compress_frame` per entry, each wrapping a
 canonical TBC container.
 
-## Read path — depth by construction
+## Read path
 
-`ArchiveReader::open` validates the header and directory eagerly (magic,
-entry-count bound, directory CRC, and per-entry frame bounds with overflow
-checks). `read_entry`/`parse_entry` then lazily walk the full chain:
+`ArchiveReader::open` parses the header and directory (magic, entry-count bound,
+directory CRC, and per-entry frame offset/length range checks). `read_entry` and
+`parse_entry` then decompress a frame and parse the container it wraps:
 
 ```
 archive header → directory entry → frame header → codec decompress
               → container header → catalog → schema → record batch
 ```
-
-No single function reveals that path — reconstructing a valid input requires
-composing every stage, which is exactly the property the difficulty bar rewards.
 
 ## Write path
 
@@ -40,8 +37,3 @@ composing every stage, which is exactly the property the difficulty bar rewards.
 it under the chosen codec, and records the content CRC. `build()` computes the
 directory length, assigns frame offsets after it, writes the directory CRC, and
 concatenates header + directory + frames.
-
-## Fuzzing
-
-`fuzz/archive_fuzzer.cpp` opens an arbitrary buffer as an archive and parses
-every entry, exercising the deepest reachable logic in the SDK from one input.

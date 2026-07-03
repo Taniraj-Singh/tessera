@@ -5,10 +5,9 @@
 #include <cstddef>
 #include <cstdint>
 
-// Exercises the compression codecs from two directions. Path A drives a codec's
-// decompressor directly with an attacker-chosen declared size, reaching the
-// back-reference and run-length logic without first satisfying the frame's
-// magic/CRC gate. Path B validates the full self-describing frame path.
+// Exercises the compression codecs two ways. Path A calls a codec's
+// decompressor directly with a chosen declared size. Path B goes through the
+// full frame path (magic, CRC, and codec dispatch).
 extern "C" int LLVMFuzzerTestOneInput(const std::uint8_t* data, std::size_t size) {
     if (size >= 5) {
         const std::uint8_t codec_raw = static_cast<std::uint8_t>(data[0] % 4U);

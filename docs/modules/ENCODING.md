@@ -23,9 +23,8 @@ non-terminal byte:
 - a value whose high group carries bits that do not fit in 64 (`InvalidLength`,
   "overflows 64 bits").
 
-`read_uvarint32` additionally rejects values above `0xFFFFFFFF`. Because framed
-lengths are attacker-controlled, an over-long or non-terminating varint must be
-a bounded error, never an unbounded loop or an oversized allocation.
+`read_uvarint32` additionally rejects values above `0xFFFFFFFF`. An over-long or
+non-terminating varint returns a bounded error rather than looping.
 
 ## ZigZag
 

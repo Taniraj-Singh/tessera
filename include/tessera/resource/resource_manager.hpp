@@ -11,9 +11,9 @@ struct Budget {
     std::size_t max_handles{0}; // 0 means unbounded
 };
 
-// Tracks memory and handle usage against a budget. Acquisition fails closed when
-// a request would exceed either limit, so a subsystem processing untrusted input
-// can bound its footprint deterministically. Not thread-safe.
+// Tracks memory and handle usage against a budget. Acquisition returns an error
+// when a request would exceed either limit, letting a subsystem bound its
+// footprint. Not thread-safe.
 class ResourceManager {
 public:
     explicit ResourceManager(Budget budget) : budget_(budget) {}

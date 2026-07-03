@@ -14,14 +14,14 @@ encoder-side subsystems build on. It lives in the foundation layer alongside
 
 ## Design notes
 
-- **`ByteBuffer` vs `buffer::Writer`.** `Writer` performs *bounded* writes into
-  borrowed memory and returns `Result<void>` on overrun. `ByteBuffer` *owns* its
-  storage and grows, so its append helpers cannot overflow and return `void`.
-  Both emit identical little-endian layouts, so a block can be produced by either
-  and parsed by the same `buffer::Reader`.
+- **`ByteBuffer` vs `buffer::Writer`.** `Writer` writes into a fixed borrowed
+  buffer and returns `Result<void>` when a write would not fit. `ByteBuffer` owns
+  its storage and grows it, so its append helpers return `void`. Both emit
+  identical little-endian layouts, so a block can be produced by either and read
+  by the same `buffer::Reader`.
 - **Backfilling length prefixes.** Framed formats write a placeholder length,
   emit the payload, then `patch_u32` the real extent once known. `patch_u32`
-  bounds-checks the offset and fails closed.
+  checks the offset is in range and returns an error otherwise.
 - **Arena alignment.** `allocate` rejects non-power-of-two alignments and
   reserves worst-case padding headroom when growing so the post-grow retry
   always fits. Pointers stay valid until `reset()`.

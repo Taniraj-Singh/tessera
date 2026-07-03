@@ -12,9 +12,8 @@ namespace tessera::records {
 namespace {
 
 // Decodes one fixed-width field with a direct little-endian read, advancing the
-// cursor by the field's on-wire width. Used only by the fixed-layout fast path,
-// which has already validated that the row region holds every row; the variable
-// types never reach here.
+// cursor by the field's on-wire width. Used by the fixed-layout fast path;
+// variable-width types are handled by the general path.
 FieldValue read_fixed_field(schema::FieldType type, const std::uint8_t*& cursor) {
     switch (type) {
     case schema::FieldType::Bool: {
@@ -258,11 +257,11 @@ core::Result<RecordBatch> decode(core::ByteSpan block, const schema::SchemaBlock
         return row_count.error();
     }
 
-    // Fixed-layout fast path. When every field is fixed-width the row stride is
-    // a constant, so the whole row region can be bounds-checked in a single
-    // comparison and each row decoded with direct little-endian reads instead of
-    // the per-field bounded Reader. The compiled schema supplies the stride;
-    // variable-width schemas fall through to the general path below.
+    // Fixed-layout fast path. When every field is fixed-width, rows share a
+    // constant stride, so the decoder compares the available size against the
+    // row count once and then reads each row with direct little-endian reads
+    // rather than the per-field Reader. The stride comes from the compiled
+    // schema; variable-width schemas use the general path below.
     if (auto compiled = schema::compile(schema); compiled && compiled->all_fixed()) {
         const std::size_t stride = compiled->min_row_size();
         const std::size_t available = bounded.size - reader.position();

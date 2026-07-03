@@ -33,7 +33,6 @@ Decompression, canonicalization, and conversion all fit this shape.
 
 ## Archive pipeline
 
-`run_archive_pipeline(bytes)` opens an archive and drives every entry through
-decode + structural + semantic validation, folding per-entry `EntryOutcome`s into
-a `PipelineReport`. It is the end-to-end path the `pipeline_fuzzer` drives, and
-the deepest reachable orchestration in the SDK.
+`run_archive_pipeline(bytes)` opens an archive and runs every entry through
+decode plus structural and semantic validation, folding per-entry
+`EntryOutcome`s into a `PipelineReport`.

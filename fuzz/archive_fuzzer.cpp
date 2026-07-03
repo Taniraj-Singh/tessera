@@ -4,10 +4,8 @@
 #include <cstddef>
 #include <cstdint>
 
-// Drives the full archive path: header + directory validation, then per-entry
-// frame decompression and container parsing. This reaches the deepest logic in
-// the SDK — archive directory -> compression frame -> codec -> container parse
-// -> catalog -> schema -> record decode — from a single byte buffer.
+// Opens a byte buffer as an archive and parses each entry, exercising the
+// archive reader, the compression frame layer, and the container parser.
 extern "C" int LLVMFuzzerTestOneInput(const std::uint8_t* data, std::size_t size) {
     auto reader = tessera::archive::ArchiveReader::open(tessera::core::ByteSpan{data, size});
     if (!reader) {

@@ -8,11 +8,9 @@
 
 namespace tessera::encoding {
 
-// LEB128 variable-length integers. The compact framing used by the compression
-// and archive layers stores most lengths as uvarints, so a stray high bit in a
-// continuation byte can extend a value far past the declared block — the reader
-// therefore caps the byte count and reports the offset on failure, matching the
-// fail-closed contract of buffer::Reader.
+// LEB128 variable-length integers, used by the compression and archive layers
+// to store compact lengths. The reader caps the byte count per value and reports
+// the byte offset on a malformed encoding.
 
 inline constexpr std::size_t kMaxVarint32Bytes = 5;
 inline constexpr std::size_t kMaxVarint64Bytes = 10;

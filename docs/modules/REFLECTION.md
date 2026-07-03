@@ -9,7 +9,7 @@ site.
 - **`TypeInfo`** (`reflect/type_info.hpp`) — a runtime record per field type:
   display name, whether it is fixed- or variable-width, its fixed wire size,
   and category flags (`numeric`, `is_signed`, `aggregate`). Backed by a static
-  table indexed by the enum value, with slot 0 a safe "unknown" fallback for an
+  table indexed by the enum value, with slot 0 an "unknown" fallback for an
   out-of-range enum.
 - **`FieldRef`** (`reflect/field_ref.hpp`) — a non-owning pairing of a
   `FieldDescriptor` with a decoded `records::FieldValue`. Provides typed

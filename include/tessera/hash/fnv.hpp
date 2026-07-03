@@ -8,9 +8,8 @@
 namespace tessera::hash {
 
 // FNV-1a, the small non-cryptographic hash used for string keys in the index
-// and metadata subsystems. Deterministic across platforms; not collision
-// resistant against adversarial keys, which is acceptable because the index
-// stores and compares the full key on lookup.
+// and metadata subsystems. Deterministic across platforms. The index stores and
+// compares the full key on lookup, so hash collisions do not affect correctness.
 
 inline constexpr std::uint32_t kFnvOffset32 = 0x811C9DC5U;
 inline constexpr std::uint32_t kFnvPrime32 = 0x01000193U;

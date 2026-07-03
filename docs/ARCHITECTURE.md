@@ -2,7 +2,7 @@
 
 ## Overview
 
-Tessera implements the Tessera Binary Container (TBC) format as a layered SDK. Each layer validates bounded input and returns structured errors — the parse path never trusts attacker-controlled lengths.
+Tessera implements the Tessera Binary Container (TBC) format as a layered SDK. Each layer parses its input and returns structured errors with byte offsets.
 
 ## Layer Diagram
 
@@ -53,15 +53,14 @@ Parsing proceeds in strict order:
 
 Serialization runs the reverse path and invokes `BeforeSerialize` plugins.
 
-## Design Principles
+## Conventions
 
-| Principle | Application |
+| Convention | Application |
 |-----------|-------------|
-| Fail-closed | All failures return `Result<T, Error>` with byte offset |
-| Bounded I/O | `buffer::Reader` rejects overruns before allocation |
-| No global parse state | Container model passed explicitly; plugin registry is the only singleton |
-| Deterministic output | Serializer computes stable offsets for round-trip tests |
-| Fuzz-friendly surface | Independent fuzz targets per artifact module |
+| Structured errors | Failures return `Result<T, Error>` with a byte offset |
+| Explicit state | The container model is passed explicitly; the plugin registry is the only singleton |
+| Deterministic output | The serializer computes stable offsets for round-trip tests |
+| Per-module targets | Independent unit-test and fuzz targets exercise the artifact modules |
 
 ## Plugin Architecture
 

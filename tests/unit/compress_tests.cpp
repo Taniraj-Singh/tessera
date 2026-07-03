@@ -85,7 +85,7 @@ int run_compress_tests() {
     }
 
     {
-        // A declared size that the payload cannot fill must fail closed.
+        // A declared size larger than the payload should return an error.
         std::vector<std::uint8_t> tiny = {0x00};
         auto restored = store.decompress(core::ByteSpan{tiny.data(), tiny.size()}, 64);
         TESSERA_EXPECT_TRUE(!restored.ok());
