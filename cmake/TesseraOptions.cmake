@@ -3,6 +3,7 @@ option(TESSERA_BUILD_EXAMPLES "Build Tessera examples" ON)
 option(TESSERA_BUILD_TOOLS "Build Tessera CLI tools" ON)
 option(TESSERA_BUILD_FUZZ "Build libFuzzer harnesses" OFF)
 option(TESSERA_ENABLE_SANITIZERS "Enable AddressSanitizer and UndefinedBehaviorSanitizer" OFF)
+option(TESSERA_WARNINGS_AS_ERRORS "Treat compiler warnings as errors" ON)
 
 if(TESSERA_ENABLE_SANITIZERS)
     set(CMAKE_BUILD_TYPE Sanitize CACHE STRING "Sanitize build" FORCE)
