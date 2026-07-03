@@ -1,0 +1,5 @@
+# Normalize line endings. Shell scripts must stay LF so the ClusterFuzzLite
+# Linux build can execute them regardless of the platform they were committed on.
+* text=auto
+*.sh text eol=lf
+*.py text eol=lf
