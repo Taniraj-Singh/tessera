@@ -143,7 +143,7 @@ core::Result<MappedFile> MappedFile::open(const std::string& path) {
         return mapped;
     }
 
-    void* mapped_ptr = mmap(nullptr, static_cast<std::size_t>(stat_buf.st_size), PROT_READ, MAP_PRIVATE, fd, 0);
+    void* mapped_ptr = ::mmap(nullptr, static_cast<std::size_t>(stat_buf.st_size), PROT_READ, MAP_PRIVATE, fd, 0);
     if (mapped_ptr == MAP_FAILED) {
         close(fd);
         return core::Error{core::ErrorCode::MapFailed, "mmap failed", 0};
