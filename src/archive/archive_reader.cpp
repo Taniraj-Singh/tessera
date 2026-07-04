@@ -3,6 +3,7 @@
 #include "tessera/buffer/reader_writer.hpp"
 #include "tessera/checksum/crc32c.hpp"
 #include "tessera/compress/frame.hpp"
+#include "tessera/core/constants.hpp"
 #include "tessera/parse/parser.hpp"
 
 namespace tessera::archive {
@@ -120,14 +121,14 @@ core::Result<ArchiveReader> ArchiveReader::open(core::ByteSpan archive) {
             return crc.error();
         }
 
-        // Frames live after the directory and must sit entirely within the
-        // archive with no address wraparound.
-        const std::uint64_t frame_end = entry.frame_offset + entry.frame_length;
-        if (frame_end < entry.frame_offset) {
-            return core::Error{core::ErrorCode::SectionOutOfBounds, "archive frame length overflow", 0};
+        // Frames follow the directory. Reject an offset that lands inside the
+        // directory or at/past the end of the archive, and a frame larger than
+        // the maximum block size.
+        if (entry.frame_offset < directory_end || entry.frame_offset >= archive.size) {
+            return core::Error{core::ErrorCode::SectionOutOfBounds, "archive frame offset out of range", 0};
         }
-        if (entry.frame_offset < directory_end || frame_end > archive.size) {
-            return core::Error{core::ErrorCode::SectionOutOfBounds, "archive frame outside container", 0};
+        if (entry.frame_length > core::kMaxBlockSize) {
+            return core::Error{core::ErrorCode::InvalidLength, "archive frame length exceeds limit", 0};
         }
         reader.entries_.push_back(std::move(entry));
     }
